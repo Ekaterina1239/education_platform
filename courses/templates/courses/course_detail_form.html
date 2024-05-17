@@ -1,0 +1,15 @@
+{% extends 'courses/base.html' %}
+
+{% block title %}{{ course.title }} Details{% endblock %}
+
+{% block content %}
+    <h2>{{ course.title }} Details</h2>
+    <p>Description: {{ course.description }}</p>
+    <h3>Add New Lesson</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ lesson_form.as_p }}
+        <button type="submit">Add Lesson</button>
+    </form>
+
+{% endblock %}

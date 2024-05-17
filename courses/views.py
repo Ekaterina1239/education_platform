@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 
-from .forms import LessonForm
+from .forms import LessonForm, CourseForm
 from .models import Course, Lesson
 
 
@@ -30,13 +30,13 @@ class LessonDetailView(DetailView):
     context_object_name = 'lesson'
 
 
-class CourseDetailView(DetailView):
+class CourseDetailFormView(DetailView):
     model = Course
-    template_name = 'courses/course_detail.html'
+    template_name = 'courses/course_detail_form.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['lesson_form'] = LessonForm()
+        context['lesson_form'] = LessonForm()  # Corrected: Use CourseForm here
         return context
 
     def post(self, request, *args, **kwargs):
@@ -49,3 +49,14 @@ class CourseDetailView(DetailView):
             return redirect('course_detail', pk=course.pk)
         else:
             return render(request, self.template_name, {'lesson_form': form})
+
+def course_list_form(request):
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('courses_list')
+    else:
+        form = CourseForm()
+    courses = Course.objects.all()
+    return render(request, 'course_list.html', {'courses': courses, 'form': form})

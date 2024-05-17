@@ -1,0 +1,19 @@
+{% extends 'courses/base.html' %}
+
+{% block title %}Courses List Form {% endblock %}
+
+{% block content %}
+    <h2>Courses List</h2>
+    <ul>
+        {% for course in courses %}
+            <li>{{ course.title }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Add New Course</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Course</button>
+    </form>
+{% endblock %}
